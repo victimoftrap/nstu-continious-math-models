@@ -1,5 +1,6 @@
 from typing import List
 
+
 def solve(system_coeffs: List[List[float]], constants: List[float]) -> List[float]:
     """Решить систему линейных уравнений.
 
@@ -28,10 +29,9 @@ def solve(system_coeffs: List[List[float]], constants: List[float]) -> List[floa
 
             a[row_under][row] = 0
             for col in range(row + 1, size):
-                a[row_under][col] -=  a[row][col] * coefficient
+                a[row_under][col] -= a[row][col] * coefficient
 
             b[row_under] -= b[row] * coefficient
-
 
     solution = [0 for i in range(size)]
 
@@ -44,6 +44,7 @@ def solve(system_coeffs: List[List[float]], constants: List[float]) -> List[floa
         solution[row] = (b[row] - s) * inverse_diagonal_el
 
     return solution
+
 
 def __find_row_with_max_element__(matrix: List[List[float]], start_row: int) -> int:
     """Найти строку в матрице с элементом большим по модулю, чем на диагонали.
