@@ -1,5 +1,6 @@
 from typing import List
 
+
 def generate_matrix_a(xs: List[float], omega: List[float], finite_elems: List[List[float]]) -> List[List[float]]:
     """Сгенерировать глобальную матрицу A для СЛАУ сплайна.
 
@@ -26,6 +27,7 @@ def generate_matrix_a(xs: List[float], omega: List[float], finite_elems: List[Li
 
     return global_a
 
+
 def __generate_local_matrix_a__(xs: List[float], omega: List[float], finite_elem: List[float]) -> List[List[float]]:
     """Сгенерировать локальную матрицу A для конечного элемента.
 
@@ -37,24 +39,25 @@ def __generate_local_matrix_a__(xs: List[float], omega: List[float], finite_elem
     Returns:
         Сгенерированная локальная матрица A.
     """
-    MATRIX_SIZE = 4
+    matrix_size = 4
 
-    xs_in_finite_elem = list(filter(lambda x: x >= finite_elem[0] and x <= finite_elem[1], xs))
-    
-    local_a = [[0 for col in range(MATRIX_SIZE)] for row in range(MATRIX_SIZE)]
+    xs_in_finite_elem = list(filter(lambda x: finite_elem[0] <= x <= finite_elem[1], xs))
 
-    for i in range(MATRIX_SIZE):
-        for j in range(MATRIX_SIZE):
+    local_a = [[0 for col in range(matrix_size)] for row in range(matrix_size)]
+
+    for i in range(matrix_size):
+        for j in range(matrix_size):
             component_value = 0
 
             for k in range(len(xs_in_finite_elem)):
                 psi_first = __calculate_psi__(i + 1, xs_in_finite_elem[k], finite_elem)
                 psi_second = __calculate_psi__(j + 1, xs_in_finite_elem[k], finite_elem)
                 component_value += psi_first * psi_second * omega[k]
-            
+
             local_a[i][j] = component_value
-    
+
     return local_a
+
 
 def __calculate_psi__(psi_number: int, point: float, finite_elem: List[float]) -> float:
     """Вычислить значение psi в точке относительно конечного элемента.
@@ -86,7 +89,9 @@ def __calculate_psi__(psi_number: int, point: float, finite_elem: List[float]) -
     else:
         return finite_elem_len * phi_in_point
 
-def generate_vector_b(xs: List[float], fs: List[float], omega: List[float], finite_elems: List[List[float]]) -> List[float]:
+
+def generate_vector_b(xs: List[float], fs: List[float], omega: List[float], finite_elems: List[List[float]]) -> \
+        List[float]:
     """Сгенерировать глобальный вектор b для СЛАУ сплайна.
 
     Args:
@@ -98,7 +103,7 @@ def generate_vector_b(xs: List[float], fs: List[float], omega: List[float], fini
     Returns:
         Сгенерированный вектор b.
     """
-    
+
     vector_size = 2 * (len(finite_elems) + 1)
     global_b = [0 for i in range(vector_size)]
     vector_b_offset = 0
@@ -112,7 +117,9 @@ def generate_vector_b(xs: List[float], fs: List[float], omega: List[float], fini
 
     return global_b
 
-def __generate_local_vector_b__(xs: List[float], fs: List[float], omega: List[float], finite_elem: List[float]) -> List[float]:
+
+def __generate_local_vector_b__(xs: List[float], fs: List[float], omega: List[float], finite_elem: List[float]) -> \
+        List[float]:
     """Сгенерировать локальный вектор b для конечного элемента.
 
     Args:
@@ -124,22 +131,22 @@ def __generate_local_vector_b__(xs: List[float], fs: List[float], omega: List[fl
     Returns:
         Сгенерированный локальный вектор b.
     """
-    VECTOR_SIZE = 4
+    vector_size = 4
 
     xs_in_finite_elem = []
     fs_in_finite_elem = []
     for i in range(len(xs)):
-        if xs[i] >= finite_elem[0] and xs[i] < finite_elem[1]:
+        if finite_elem[0] <= xs[i] < finite_elem[1]:
             xs_in_finite_elem.append(xs[i])
             fs_in_finite_elem.append(fs[i])
 
-    local_b = [0 for i in range(VECTOR_SIZE)]
-    for b_index in range(VECTOR_SIZE):
+    local_b = [0 for i in range(vector_size)]
+    for b_index in range(vector_size):
         component_value = 0
 
         for i in range(len(xs_in_finite_elem)):
             psi = __calculate_psi__(b_index + 1, xs_in_finite_elem[i], finite_elem)
             component_value += psi * fs_in_finite_elem[i] * omega[i]
         local_b[b_index] = component_value
-    
+
     return local_b

@@ -1,4 +1,5 @@
 import generator as gen
+import linear_equation
 
 if __name__ == "__main__":
     a = gen.generate_matrix_a(
@@ -12,4 +13,8 @@ if __name__ == "__main__":
         omega=[1 for i in range(11)],
         finite_elems=[[0, 2], [2, 5]]
     )
-    print(b)
+    q = linear_equation.solve(
+        system_coeffs=a,
+        constants=b
+    )
+    print(q)
