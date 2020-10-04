@@ -1,5 +1,7 @@
 from typing import List
 
+from src.polynomial import Polynomial
+
 
 def generate_matrix_a(xs: List[float], omega: List[float], finite_elems: List[List[float]]) -> List[List[float]]:
     """Сгенерировать глобальную матрицу A для СЛАУ сплайна.
@@ -80,14 +82,11 @@ def __calculate_psi__(psi_number: int, point: float, finite_elem: List[float]) -
     finite_elem_len = finite_elem[1] - finite_elem[0]
     normalized_point = (point - finite_elem[0]) / finite_elem_len
 
-    phi_in_point = .0
-    for i in range(4):
-        phi_in_point += (normalized_point ** i) * phi_functions[psi_number - 1][i]
-
+    psi_value = Polynomial(phi_functions[psi_number - 1]).calc(normalized_point)
     if psi_number % 2:
-        return phi_in_point
+        return psi_value
     else:
-        return finite_elem_len * phi_in_point
+        return finite_elem_len * psi_value
 
 
 def generate_vector_b(xs: List[float], fs: List[float], omega: List[float], finite_elems: List[List[float]]) -> \
