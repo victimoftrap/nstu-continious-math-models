@@ -11,3 +11,11 @@ class FiniteElement:
 
     left: float
     right: float
+
+    def length(self) -> float:
+        """Вычислить длину конечного элемента.
+
+        Returns:
+            длина
+        """
+        return self.right - self.left
