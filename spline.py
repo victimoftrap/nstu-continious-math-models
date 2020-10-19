@@ -1,14 +1,16 @@
 from typing import List
-from generator import calculate_psi
 from operator import mul
 
+from finite_element import FiniteElement
+from linsys_generator import calculate_psi
 
-def compute_spline_in_point(x: float, finite_elems: List[List[float]], qs: List[float]) -> float:
+
+def compute_spline_in_point(x: float, finite_elems: List[FiniteElement], qs: List[float]) -> float:
     """Вычислить значение сплайна в выбранной точке.
 
     Args:
         x (float): точка, в которой вычисляется сплайн
-        finite_elems (List[List[float]]): конечные элемены
+        finite_elems (List[FiniteElement]): конечные элемены
         qs (List[float]): решение СЛАУ Aq=b
 
     Returns:
@@ -19,7 +21,7 @@ def compute_spline_in_point(x: float, finite_elems: List[List[float]], qs: List[
     working_finite_elem_index = 0
 
     for i in range(len(finite_elems)):
-        if finite_elems[i][0] <= x <= finite_elems[i][1]:
+        if finite_elems[i].left <= x < finite_elems[i].right:
             working_finite_elem = finite_elems[i]
             working_finite_elem_index = i + 1
 
