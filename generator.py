@@ -52,8 +52,8 @@ def __generate_local_matrix_a__(xs: List[float], omega: List[float], finite_elem
             component_value = 0
 
             for k in range(len(xs_in_finite_elem)):
-                psi_first = __calculate_psi__(i + 1, xs_in_finite_elem[k], finite_elem)
-                psi_second = __calculate_psi__(j + 1, xs_in_finite_elem[k], finite_elem)
+                psi_first = calculate_psi(i + 1, xs_in_finite_elem[k], finite_elem)
+                psi_second = calculate_psi(j + 1, xs_in_finite_elem[k], finite_elem)
                 component_value += psi_first * psi_second * omega[k]
 
             local_a[i][j] = component_value
@@ -61,7 +61,7 @@ def __generate_local_matrix_a__(xs: List[float], omega: List[float], finite_elem
     return local_a
 
 
-def __calculate_psi__(psi_number: int, point: float, finite_elem: List[float]) -> float:
+def calculate_psi(psi_number: int, point: float, finite_elem: List[float]) -> float:
     """Вычислить значение psi в точке относительно конечного элемента.
 
     Args:
@@ -144,7 +144,7 @@ def __generate_local_vector_b__(xs: List[float], fs: List[float], omega: List[fl
         component_value = 0
 
         for i in range(len(xs_in_finite_elem)):
-            psi = __calculate_psi__(b_index + 1, xs_in_finite_elem[i], finite_elem)
+            psi = calculate_psi(b_index + 1, xs_in_finite_elem[i], finite_elem)
             component_value += psi * fs_in_finite_elem[i] * omega[i]
         local_b[b_index] = component_value
 
