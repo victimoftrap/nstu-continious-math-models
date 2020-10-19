@@ -1,6 +1,6 @@
 from typing import List
 
-from src.polynomial import Polynomial
+from polynomial import Polynomial
 
 
 def generate_matrix_a(xs: List[float], omega: List[float], finite_elems: List[List[float]]) -> List[List[float]]:
