@@ -1,7 +1,8 @@
-from typing import List
+from typing import List, Callable
 
 from finite_element import FiniteElement
 from psi import calculate_psi
+from regularization import generate_beta_regularization_matrix
 
 
 def generate_matrix_a(xs: List[float], omega: List[float], finite_elems: List[FiniteElement]) -> List[List[float]]:
@@ -29,6 +30,32 @@ def generate_matrix_a(xs: List[float], omega: List[float], finite_elems: List[Fi
         matrix_a_offset += 2
 
     return global_a
+
+
+def generate_regularized_matrix_a(xs: List[float], omega: List[float], finite_elems: List[FiniteElement],
+                                  alpha: Callable, beta: Callable) -> List[List[float]]:
+    """Сгенерировать регуляризированную глобальную матрицу A для СЛАУ сплайна.
+
+    Args:
+        xs (List[float]): точки, в которых взяты значения функции
+        omega (List[float]): веса, регулирующие близость сплайна в точке x
+        finite_elems (List[FiniteElement]): список конечных элементов
+        alpha (Callable): параметр alpha, "подкручивающий" значение первых производных
+        beta (Callable): параметр beta, "подкручивающий" значение вторых производных
+
+    Returns:
+
+    """
+    simple_a = generate_matrix_a(xs, omega, finite_elems)
+    regularization_matrix = generate_beta_regularization_matrix(beta, finite_elems)
+    return __add_two_matrices__(simple_a, regularization_matrix)
+
+
+def __add_two_matrices__(m1: List[List[float]], m2: List[List[float]]):
+    for i in range(len(m1)):
+        for j in range(len(m1)):
+            m1[i][j] += m2[i][j]
+    return m1
 
 
 def __generate_local_matrix_a__(xs: List[float], omega: List[float], finite_elem: FiniteElement) -> List[List[float]]:

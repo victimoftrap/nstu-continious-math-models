@@ -9,11 +9,14 @@ if __name__ == "__main__":
     finite_elems = [FiniteElement(0, 2), FiniteElement(2, 5)]
     spline_point = 0.8
 
-    a = gen.generate_matrix_a(
+    a = gen.generate_regularized_matrix_a(
         xs=xs,
         omega=[1 for i in range(11)],
-        finite_elems=finite_elems
+        finite_elems=finite_elems,
+        alpha=lambda: 0,
+        beta=lambda: 0.000001
     )
+
     b = gen.generate_vector_b(
         xs=xs,
         fs=fs,
