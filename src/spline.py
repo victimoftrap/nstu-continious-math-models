@@ -1,8 +1,8 @@
 from typing import List
 from operator import mul
 
-from finite_element import FiniteElement
-from linsys_generator import calculate_psi
+from src.finite_element import FiniteElement
+from src.linsys_generator import calculate_psi
 
 
 def compute_spline_in_point(x: float, finite_elems: List[FiniteElement], qs: List[float]) -> float:

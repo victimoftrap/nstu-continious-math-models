@@ -1,5 +1,5 @@
-from finite_element import FiniteElement
-from polynomial import Polynomial
+from src.finite_element import FiniteElement
+from src.polynomial import Polynomial
 
 
 def calculate_psi(psi_number: int, point: float, finite_elem: FiniteElement) -> float:

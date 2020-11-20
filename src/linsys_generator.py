@@ -1,8 +1,8 @@
 from typing import List, Callable
 
-from finite_element import FiniteElement
-from psi import calculate_psi
-from regularization import generate_beta_regularization_matrix
+from src.finite_element import FiniteElement
+from src.psi import calculate_psi
+from src.regularization import generate_beta_regularization_matrix
 
 
 def generate_matrix_a(xs: List[float], omega: List[float], finite_elems: List[FiniteElement]) -> List[List[float]]:

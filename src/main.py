@@ -2,10 +2,8 @@ from math import sin
 
 import numpy
 
-from finite_element import FiniteElement
-import linsys_generator as gen
-import linear_equation
-import spline
+from src.finite_element import FiniteElement
+from src import spline, linsys_generator as gen, linear_equation
 
 from PySide2 import QtWidgets
 import pyqtgraph as pg

@@ -1,8 +1,8 @@
 from typing import List, Callable
 
-from polynomial import Polynomial
-from finite_element import FiniteElement
-import riemann_sum
+from src.polynomial import Polynomial
+from src.finite_element import FiniteElement
+from src import riemann_sum
 
 
 def generate_beta_regularization_matrix(beta: Callable, finite_elems: List[FiniteElement]) -> List[List[float]]:
