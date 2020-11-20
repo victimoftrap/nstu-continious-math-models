@@ -1,13 +1,13 @@
 from math import sin
+import sys
+
+from src import spline, linsys_generator as gen, linear_equation
+from src.utils import get_finite_elements
 
 import numpy
 
-from src.finite_element import FiniteElement
-from src import spline, linsys_generator as gen, linear_equation
-
 from PySide2 import QtWidgets
 import pyqtgraph as pg
-import sys
 
 q = []
 finite_elems = []
@@ -48,9 +48,7 @@ def calculate():
     xs = [0., 0.5, 1.1, 1.5, 2., 2.5, 2.7, 3., 4., 4.5, 4.8, 5.]
     fs = list(map(sin, xs))
     # fs[2] = -0.5
-    finite_elems = [FiniteElement(0, 2), FiniteElement(1, 2), FiniteElement(2, 3),
-                    FiniteElement(3, 3.5), FiniteElement(2, 5)]
-    # spline_point = 0.8
+    finite_elems = get_finite_elements([0, 3, 6])
 
     a = gen.generate_regularized_matrix_a(
         xs=xs,
@@ -59,7 +57,6 @@ def calculate():
         alpha=lambda: 0,
         beta=lambda: 0.001
     )
-
     b = gen.generate_vector_b(
         xs=xs,
         fs=fs,
@@ -70,14 +67,6 @@ def calculate():
         system_coeffs=a,
         constants=b
     )
-    # print("Got solution of linear system: ", q)
-
-    # res = spline.compute_spline_in_point(
-    #     x=spline_point,
-    #    finite_elems=finite_elems,
-    #     qs=q
-    # )
-    # print("Spline in point", spline_point, "is", res)
 
 
 def main():
