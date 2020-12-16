@@ -45,14 +45,14 @@ def calculate():
     global xs
     global fs
 
-    xs = [0., 0.5, 1.1, 1.5, 2., 2.5, 2.7, 3., 4., 4.5, 4.8, 5.]
+    xs = [x * 0.5 for x in range(10)]
+    xs_length = len(xs)
     fs = list(map(sin, xs))
-    # fs[2] = -0.5
     finite_elems = get_finite_elements([0, 3, 6])
 
     a = gen.generate_regularized_matrix_a(
         xs=xs,
-        omega=[1 for i in range(11)],
+        omega=[1 for i in range(xs_length)],
         finite_elems=finite_elems,
         alpha=lambda: 0,
         beta=lambda: 0.001
@@ -60,7 +60,7 @@ def calculate():
     b = gen.generate_vector_b(
         xs=xs,
         fs=fs,
-        omega=[1 for i in range(11)],
+        omega=[1 for i in range(xs_length)],
         finite_elems=finite_elems
     )
     q = linear_equation.solve(
@@ -72,8 +72,8 @@ def calculate():
 def main():
     calculate()
     app = QtWidgets.QApplication(sys.argv)
-    main = MainWindow()
-    main.show()
+    main_window = MainWindow()
+    main_window.show()
     sys.exit(app.exec_())
 
 
