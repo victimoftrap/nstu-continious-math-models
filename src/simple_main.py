@@ -11,16 +11,14 @@ import matplotlib.pyplot as plt
 from numpy import std
 
 
-def compute_spline_points(xs: List[float], fs: List[float], fins: List[float], beta_func: Callable, a_omega, b_omega) -> List[float]:
+def compute_spline_points(xs: List[float], fs: List[float], fins: List[float],
+                          beta_func: Callable, omega: List[float]) -> List[float]:
     finite_elems = get_finite_elements(fins)
     xs_length = len(xs)
 
-    # a_omega = [1 for i in range(xs_length)]
-    # b_omega = [1 for i in range(xs_length)]
-
     a = gen.generate_regularized_matrix_a(
         xs=xs,
-        omega=a_omega,
+        omega=omega,
         finite_elems=finite_elems,
         alpha=lambda: 0,
         # beta=lambda: 0.000001
@@ -29,7 +27,7 @@ def compute_spline_points(xs: List[float], fs: List[float], fins: List[float], b
     b = gen.generate_vector_b(
         xs=xs,
         fs=fs,
-        omega=b_omega,
+        omega=omega,
         finite_elems=finite_elems
     )
     q = linear_equation.solve(
@@ -55,15 +53,14 @@ def spline_with_omega():
 
     xs = [x * 0.05 for x in range(200)]
     fs = list(map(lambda x: - 1 * (x ** 2) + 6 * x + 9, xs))
-    fs[4] += 0.9
+    # fs[4] += 0.9
     # fs = list(map(lambda x: x ** 2 + x - 3, xs))
     finite_elems = [0, 12]
     a_omega = [1 for i in range(len(xs))]
-    b_omega = [1 for i in range(len(xs))]
 
     spline_points_first = compute_spline_points(
         xs=xs, fs=fs, fins=finite_elems, beta_func=lambda: 0.001,
-        a_omega=a_omega, b_omega=b_omega
+        omega=a_omega
     )
     plt.plot(xs, fs)
     plt.plot(xs, spline_points_first)
@@ -74,13 +71,12 @@ def spline_with_omega():
     recompute = get_recompute_dict(mean, omega_param, deviations)
 
     tuned_spline_points = [0 for i in range(200)]
-
     while len(recompute.keys()) != 0:
         print(recompute.keys())
-        recompute_omega(recompute, a_omega, b_omega)
+        recompute_omega(recompute, a_omega)
         tuned_spline_points = compute_spline_points(
             xs=xs, fs=fs, fins=finite_elems, beta_func=lambda: 0.001,
-            a_omega=a_omega, b_omega=b_omega
+            omega=a_omega
         )
         next_deviations = get_deviations(fs, tuned_spline_points)
         next_mean = statistics.mean(next_deviations)
@@ -133,9 +129,8 @@ if __name__ == '__main__':
     # finite_elems = [0, 12]
     #
     # a_omega = [1 for i in range(len(xs))]
-    # b_omega = [1 for i in range(len(xs))]
     #
-    # spline_points1 = compute_spline_points(xs=xs, fs=fs, fins=finite_elems, beta_func=lambda: 0.001, a_omega=a_omega, b_omega=b_omega)
+    # spline_points1 = compute_spline_points(xs=xs, fs=fs, fins=finite_elems, beta_func=lambda: 0.001, omega=a_omega)
     # plt.plot(xs, fs)
     # plt.plot(xs, spline_points1)
     # plt.show()

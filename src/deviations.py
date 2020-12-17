@@ -38,17 +38,15 @@ def get_recompute_dict(mean_deviation: float, grade: float, deviations: List[flo
     return recompute_dict
 
 
-def recompute_omega(recompute: Dict[int, float], a_omega: List[float], b_omega: List[float]):
+def recompute_omega(recompute: Dict[int, float], omega: List[float]):
     """Пересчитать omega.
 
     Args:
-        recompute: словарь, по которому будут пересчитываться omega.
-        a_omega: omega для матрицы A
-        b_omega: omega для вектора b
+        recompute (Dict[int, float]): словарь, по которому будут пересчитываться omega
+        omega (List[float]): веса, регулирующие близость сплайна в точке x
 
     Returns:
         none
     """
     for key in recompute.keys():
-        a_omega[key] += recompute[key]
-        b_omega[key] += recompute[key]
+        omega[key] += recompute[key]
